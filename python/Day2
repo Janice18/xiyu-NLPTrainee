@@ -1,0 +1,152 @@
+#Q1:longestPalindrome
+#Solution1:palindromeCenter
+class Solution:
+    def longestPalindrome(self, s):
+        size = len(s)
+        if size == 0:
+            return ''
+        longest_palindrome = 1
+        longest_palindrome_str = s[0]
+
+        for i in range(size):
+            paldmOdd, odd_len = self.paldmCenter(s, size, i, i)
+            paldmEven, even_len = self.paldmCenter(s, size, i, i + 1)
+            
+            cur_max_sub = paldmOdd if odd_len >= even_len else paldmEven
+            if len(cur_max_sub) > longest_palindrome:
+                longest_palindrome = len(cur_max_sub)
+                longest_palindrome_str = cur_max_sub
+
+        return longest_palindrome_str
+
+    def paldmCenter(self, s, size, left, right):
+      lf = left
+      r = right
+
+      while lf >= 0 and r < size and s[lf] == s[r]:
+         lf -= 1
+         r += 1
+      return s[lf + 1:r], r - lf + 1
+ 
+#Solution2:DP
+class Solution:
+    def longestPalindrome(self, s):
+        size = len(s)
+        if size <= 1:
+            return s
+            dp = [[False for _ in range(size)] for _ in range(size)]
+            
+            longest_l = 1
+            res = s[0]
+            
+            for r in range(1, size):
+              for l in range(r):
+                if s[l] == s[r] and (r - l <= 2 or dp[l + 1][r - 1]):
+                  dp[l][r] = True
+                  cur_len = r - l + 1
+                    if cur_len > longest_l:
+                        longest_l = cur_len
+                        res = s[l:r+1]
+            return res
+
+#Q2:count Substrings
+class Solution(object):
+    def countSubstrings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        n = len(s)
+        count = 0
+        start, end, maxL = 0, 0, 0
+        dp = [[0] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(i):
+                dp[j][i] = (s[j] == s[i]) & ((i - j < 2) | dp[j + 1][i - 1])
+                if dp[j][i]:
+                    count += 1
+            dp[i][i] = 1
+            count += 1
+        return count
+
+#Q3:Split palindrome strings
+class Solution:
+    def minCut(self, s: str) -> int:
+        """
+     :type s: str
+     :rtype: int
+     """
+
+        arr = [len(s) for i in range(len(s)+1)]
+        arr[0] = -1
+        for i in range(len(s)):
+            for j in range(i + 1):
+                if s[j:i + 1] == s[j:i + 1][::-1]:
+                    arr[i + 1] = min(arr[i + 1], arr[j] + 1)
+        return arr[-1]
+
+#Q4:Arrangement of strings
+#Solution1:
+class Solution:backtrack
+    def Permutation(self, s):
+        if not s:
+            return []
+        arr = []
+        self.backtrack(s, arr, '')
+        return sorted(list(set(arr)))
+
+    def backtrack(self, s, arr, path):
+        if not s:
+            arr.append(path)
+        else:
+            for i in range(len(s)):
+                self.backtrack(s[:i] + s[i+1:], arr, path + s[i])
+                
+#Solution2:
+class Solution:
+    def Permutation(self, ss):
+        # write code here
+        out = []
+        if len(ss) == 0:
+            return out
+        charlist = list(ss)
+        self.permutation(charlist, 0, out)
+        out = [''.join(out[i]) for i in range(len(out))]    #The list is converted to a string
+        out.sort()
+        return out
+        
+    def permutation(self, ss, begin, out):
+        if begin == len(ss)-1:
+            out.append(ss[:])
+        else:
+            for i in range(begin, len(ss)):
+                # If it's a repeat character, skip it
+                if ss[begin] == ss[i] and begin != i:
+                    continue
+                else:
+                    #Interchange with each of the following characters in turn
+                    ss[begin], ss[i] = ss[i], ss[begin]
+                    self.permutation(ss, begin + 1, out)
+                    # Go back to the previous state
+                    ss[begin], ss[i] = ss[i], ss[begin]
+ 
+Q5:pandas'basis 2
+(1)Union of two series
+import pandas as pd
+import numpy as np
+ser1 = pd.Series([1,2,3,4,5])
+ser2 = pd.Series([4,5,6,7,8])
+print(np.union1d(ser1,ser2))
+
+(2)Non-common elements of two series
+u = pd.Series(np.union1d(ser1,ser2))
+v = pd.Series(np.intersect1d(ser1, ser2))
+print(u[~u.isin(v)])
+
+(3)Get the minimum, 25th percentile, median, 75th and maximum of series
+ser = pd.Series(np.random.normal(10,5,25))
+np.random.RandomState(100)
+b = np.percentile(ser, q=[0,25,50,75,100])
+print(b) 
+            
+            
