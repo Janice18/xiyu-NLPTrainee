@@ -24,7 +24,7 @@ class Solution(object):
         valid16 = "0123456789abcdef"
         if "::" in IP: return False
         numbers = IP.split(':')
-        if len(numbers) > 8: return False
+        if len(numbers) != 8: return False
         for num in numbers:
             if not num: continue
             if len(num) >= 5: return False
@@ -35,10 +35,17 @@ class Solution(object):
 
 if __name__ == '__main__':
     a1 = '172.16.254.1'
-    a2 = '2001:0db8:85a3:0:0:8A2E:0370:7334'
+    a2 = '02001:0db8:85a3:0:0:8A2E:0370:7334'
     a3 = '256.256.256.256'
+    a4 = '0201:0db8:85a3:0000:0000:8a2e:0370:7334'
+    a5 = '02:234:123:0:2'
     print(Solution().validIPAddress(a1))
     print(Solution().validIPAddress(a2))
     print(Solution().validIPAddress(a3))
+    print(Solution().validIPAddress(a4))
+    print(Solution().validIPAddress(a5))
+
+
+
 
 
